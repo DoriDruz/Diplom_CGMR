@@ -15,6 +15,89 @@ void create_matr(ifstream& file, double *matr, double size) {
 	}
 }
 
+//bad idea
+void create_big_matr(ifstream& file, double *matr) {
+	int mid_count = 0;
+	int low_count = 0;
+	int lower_count = 0;
+	for (int i = 0; i < S; ++i) {
+				if (i == 0) {
+					file >> matr[0];
+					file >> matr[1];
+					file >> matr[247];
+					file >> matr[494];
+					file >> matr[495];
+					file >> matr[496];
+					file >> matr[497];
+				}
+				else if (i > 0 && i < 247) {
+					file >> matr[i*S + i - 1];
+					file >> matr[i*S + i];
+					file >> matr[i*S + i + 1];
+					file >> matr[i*S + i + 247];
+					file >> matr[i*S + i + 494];
+					file >> matr[i*S + i + 495];
+					file >> matr[i*S + i + 496];
+				}
+				else if (i > 246 && i < 494) {
+					file >> matr[i*S + mid_count];
+					file >> matr[i*S + mid_count + 246];
+					file >> matr[i*S + mid_count + 247];
+					file >> matr[i*S + mid_count + 248];
+					file >> matr[i*S + mid_count + 494];
+					file >> matr[i*S + mid_count + 741];
+					file >> matr[i*S + mid_count + 742];
+					mid_count++;
+				}
+				else if (i > 493 && i < 134368) {
+					file >> matr[i*S + low_count];
+					file >> matr[i*S + low_count + 247];
+					file >> matr[i*S + low_count + 493];
+					file >> matr[i*S + low_count + 494];
+					file >> matr[i*S + low_count + 495];
+					file >> matr[i*S + low_count + 741];
+					file >> matr[i*S + low_count + 988];
+					low_count++;
+				}
+				else if (i > 134367 && i < 134615) {
+					result << "0 1" << " ";
+					A1 >> tmp;
+					result << tmp << " ";
+					A2 >> tmp;
+					result << tmp << " ";
+					A3 >> tmp;
+					result << tmp << " ";
+					A4 >> tmp;
+					result << tmp << " ";
+					A5 >> tmp;
+					result << tmp << endl;
+
+					file >> matr[i*S + lower_count];
+				}
+				else if (i > 134614 && i < 134861) {
+					result << "0 0 1" << " ";
+					A1 >> tmp;
+					result << tmp << " ";
+					A2 >> tmp;
+					result << tmp << " ";
+					A3 >> tmp;
+					result << tmp << " ";
+					A4 >> tmp;
+					result << tmp << endl;
+				}
+				else if (i == 134861) {
+					result << "0 0 0 1" << " ";
+					A1 >> tmp;
+					result << tmp << " ";
+					A2 >> tmp;
+					result << tmp << " ";
+					A3 >> tmp;
+					result << tmp << endl;
+				}
+	}
+}
+
+
 //size = sizeof(matr) ?(!warn about sizeof!)?
 void show_matr(double *matr, double size) {
 	for (int i = 0; i < size; ++i) {
@@ -311,6 +394,8 @@ void main() {
 	//double *matr_E = new double[matr_size];
 	//double *matr_F = new double[matr_size / 3];
 
+	//MAKE BIG MATRIX WITH POSITIONS BUT ONLY WITH NECCESERY VALUES
+
 	double *matr_A = new double[S * 7];
 	double *matr_F = new double[S];
 
@@ -325,6 +410,9 @@ void main() {
 
 	create_matr(A, matr_A, S * 7);
 	create_matr(F, matr_F, S);
+
+	A.close();
+	F.close();
 
 	CGMR(matr_A, matr_F);
 
