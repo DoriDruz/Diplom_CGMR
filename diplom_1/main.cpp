@@ -77,9 +77,9 @@ void dif_matr(double *matr_one, double *matr_two, double *res_matr) {
 }
 
 void matr_on_vec(double *matr, double *vec, double *res_vec) {
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			res_vec[i] += matr[3*i + j] * vec[j];
+	for (int i = 0; i < S; ++i) {
+		for (int j = 0; j < 7; ++j) {
+			res_vec[i] += matr[7*i + j] * vec[j];
 
 			//debug
 			//cout << "i: " << i << " j: " << j  << " res_vec: " << res_vec[i] << " matr: " << matr[3 * i + j] << " vec: " << vec[j] <<  endl;
@@ -89,7 +89,7 @@ void matr_on_vec(double *matr, double *vec, double *res_vec) {
 
 double vec_on_vec(double *vec_one, double *vec_two) {
 	double res = 0;
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < S; ++i) {
 		res += vec_one[i] * vec_two[i];
 	}
 	//debug
@@ -101,22 +101,21 @@ double vec_on_vec(double *vec_one, double *vec_two) {
 
 double norm_vec(double *vec) {
 	double res = 0;
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < S; ++i) {
 		res += pow(vec[i], 2);
 	}
-	res = sqrt(res);
-	return res;
+	return sqrt(res);
 }
 
 //size?
 void copy_vec(double *matr_one, double *matr_two) {
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < S; ++i) {
 		matr_one[i] = matr_two[i];
 	}
 }
 
 void nullify(double *vec) {
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < S; ++i) {
 		vec[i] = 0;
 	}
 }
@@ -166,7 +165,7 @@ void CGMR(double *A, double *F) {
 	double norm = 0;
 	double norm2 = 0;
 	double vov = 0;
-	double stop_eps = 0;
+	double stop_eps = 1;
 
 	for (int i = 0; i < S; ++i) {
 		x[i] = r[i] = p[i] = 0;
@@ -174,37 +173,32 @@ void CGMR(double *A, double *F) {
 	}
 
 	//making const rA
-	//alpha*E
-	//mult_matr_on_num(E, alpha, matr_tmp, 9);
-	//rA = A + a*E
+	//rA = A + alpha*E
 	mult_A_on_alpha_E(A, alpha, rA);
-	//sum_matr(A, matr_tmp, rA, 9);
 
-	//rA*x0
-	matr_on_vec(rA, x, tmp);
-	//r = b-rA*x0
-	dif_matr(F, tmp, r);
+	//r = b-rA*x0	|rA*x0 = 0| |r = b|
+	copy_vec(r, F);
 	//p = r;
 	copy_vec(p, r);
 
 	//stop deal before cycle
-	//rA*x_k
-	matr_on_vec(rA, x_k1, stop);
-	//rA*x_k - b
-	dif_matr(stop, F, tmp);
-	//norm(rA*x_k - b)
-	stop_norm = norm_vec(tmp);
+	//rA*x_k						| = 0 |
+	//matr_on_vec(rA, x_k1, stop);
+	//rA*x_k - b					| -b |
+	//dif_matr(stop, F, tmp);
+	//norm(rA*x_k - b)				| norm(-b)|
+	//stop_norm = norm_vec(F);
 	//norm(b)
-	stop_norm2 = norm_vec(F);
-	//stop_deal = stop_norm / stop_norm2
-	stop_eps = (stop_norm / stop_norm2);
+	//stop_norm2 = norm_vec(F);
+	//stop_deal = stop_norm / stop_norm2	|always 1|
+	//stop_eps = (stop_norm / stop_norm2);
+	//stop_eps = 1;
 
 
-	//mb norm like scalar not norm (|| ||) itself?
+	//mb norm like scalar not norm (|| ||) itself - yep
 	while( !(stop_eps < Eps) ) {
 		cout << "Start of iter" << endl;
 		
-		nullify(tmp);
 		//ak = norm(r_k)^2 / (rA*p_k, p_k)
 		//norm(r_k)^2
 			//norm = pow(norm_vec(r), 2);

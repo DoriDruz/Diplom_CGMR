@@ -33,6 +33,8 @@ void main() {
 
 	result.open("result.dat");
 
+	//REWORK FOR CORRECT NULLS?
+
 	for (int i = 1; i <= size; ++i) {
 		cout << i <<  " / " << size << endl;
 		if (i == 1) {
