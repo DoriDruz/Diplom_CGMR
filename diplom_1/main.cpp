@@ -320,7 +320,7 @@ void CGMR(double *A, double *F) {
 	copy_vec(p, r);
 	clock_t end_make_prep = clock();
 
-	double p_time = double(begin_make_prep - end_make_prep) / CLOCKS_PER_SEC;
+	double p_time = double(end_make_prep - begin_make_prep) / CLOCKS_PER_SEC;
 	cout << "Preperation rA, r, p: " << p_time << endl;
 
 	//stop deal before cycle
@@ -439,11 +439,11 @@ void CGMR(double *A, double *F) {
 		nullify(r_k1);
 		nullify(tmp);
 		nullify(rApk);
-		cout << "End of iter" << endl << endl;
+		cout << "End of iter" << endl;
 		clock_t end_CGMR = clock();
 
-		double CGMR_time = double(begin_CGMR - end_CGMR) / CLOCKS_PER_SEC;
-		cout << "Preperation rA, r, p: " << CGMR_time << endl;
+		double CGMR_time = double(end_CGMR - begin_CGMR) / CLOCKS_PER_SEC;
+		cout << "Runtime of iter: " << CGMR_time << endl << endl;
 	}
 	delete(x);
 	delete(r);
