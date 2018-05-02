@@ -15,8 +15,7 @@ void create_matr(ifstream& file, double *matr, double size) {
 	}
 }
 
-//bad idea
-void create_big_matr(ifstream& file, double *matr) {
+/*void create_big_matr(ifstream& file, double *matr) {
 	int mid_count = 0;
 	int low_count = 0;
 	int lower_count = 0;
@@ -95,8 +94,7 @@ void create_big_matr(ifstream& file, double *matr) {
 					result << tmp << endl;
 				}
 	}
-}
-
+}*/
 
 //size = sizeof(matr) ?(!warn about sizeof!)?
 void show_matr(double *matr, double size) {
@@ -116,6 +114,7 @@ void mult_matr_on_num(double *matr, double num, double *res_matr, double size) {
 	}
 }
 
+//rework?
 void mult_A_on_alpha_E(double *matr, double alpha, double *res_matr) {
 	for (int i = 0; i < S; ++i) {
 		if (i == 0) {
@@ -160,13 +159,47 @@ void dif_matr(double *matr_one, double *matr_two, double *res_matr) {
 }
 
 void matr_on_vec(double *matr, double *vec, double *res_vec) {
+	int second_count = 0;
+	int third_count = 0;
+	int fourth_count = 0;
+	int fifth_count = 0;
+	int sixth_count = 0;
 	for (int i = 0; i < S; ++i) {
-		for (int j = 0; j < 7; ++j) {
-			res_vec[i] += matr[7*i + j] * vec[j];
-
-			//debug
-			//cout << "i: " << i << " j: " << j  << " res_vec: " << res_vec[i] << " matr: " << matr[3 * i + j] << " vec: " << vec[j] <<  endl;
+		if (i == 0) {
+			res_vec[i] = matr[0] * vec[0] + matr[1] * vec[1] + matr[2] * vec[247] + matr[3] * vec[494];
 		}
+		else if (i > 0 && i < 247) {
+			res_vec[i] = matr[7 * i] * vec[second_count] + matr[7 * i + 1] * vec[second_count + 1] + matr[7 * i + 2] * vec[second_count + 2] \
+				+ matr[7 * i + 3] * vec[second_count + 248] + matr[7 * i + 4] * vec[second_count + 495];
+			second_count++;
+		}
+		else if (i > 246 && i < 494) {
+			res_vec[i] = matr[7 * i] * vec[third_count] + matr[7 * i + 1] * vec[third_count + 246] + matr[7 * i + 2] * vec[third_count + 247] + matr[7 * i + 3] * vec[third_count + 248] \
+				+ matr[7 * i + 4] * vec[third_count + 494] + matr[7 * i + 5] * vec[third_count + 741];
+			third_count++;
+		}
+		else if (i > 493 && i < 134368) {
+			res_vec[i] = matr[7 * i] * vec[fourth_count] + matr[7 * i + 1] * vec[fourth_count + 247] + matr[7 * i + 2] * vec[fourth_count + 493] + matr[7 * i + 3] * vec[fourth_count + 494] \
+				+ matr[7 * i + 4] * vec[fourth_count + 495] + matr[7 * i + 5] * vec[fourth_count + 741] + matr[7 * i + 6] * vec[fourth_count + 988];
+			fourth_count++;
+		}
+		else if (i > 134367 && i < 134615) {
+			res_vec[i] = matr[7 * i + 1] * vec[fifth_count + 133874] + matr[7 * i + 2] * vec[fifth_count + 134121] + matr[7 * i + 3] * vec[fifth_count + 134367] \
+				+ matr[7 * i + 4] * vec[fifth_count + 134368] + matr[7 * i + 5] * vec[fifth_count + 134369] + matr[7 * i + 6] * vec[fifth_count + 134615];
+			fifth_count++;
+		}
+		else if (i > 134614 && i < 134861) {
+			res_vec[i] = matr[7 * i + 2] * vec[sixth_count + 134121] + matr[7 * i + 3] * vec[sixth_count + 134368] + matr[7 * i + 4] * vec[sixth_count + 134614] + \
+				+ matr[7 * i + 5] * vec[sixth_count + 134615] + matr[7 * i + 6] * vec[sixth_count + 134616];
+			sixth_count++;
+		}
+		else if (i == 134861) { //last_element_position = 944034
+			res_vec[i] = matr[7 * i + 3] * vec[134367] + matr[7 * i + 4] * vec[134614] + matr[7 * i + 5] * vec[134860] + matr[7 * i + 6] * vec[134861];
+		}
+		
+		//debug
+		//cout << "i: " << i << " j: " << j  << " res_vec: " << res_vec[i] << " matr: " << matr[3 * i + j] << " vec: " << vec[j] <<  endl;
+		
 	}
 }
 
