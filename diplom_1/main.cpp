@@ -9,6 +9,20 @@ using namespace std;
 //global
 const int S = 134862;
 
+void write_in_file(double *vec, double size) {
+	cout << "Start write in file" << endl;
+	fstream result_file;
+	result_file.open("x_res_from_main.txt");
+
+	for (int i = 0; i < size; ++i) {
+		result_file << vec[i] << endl;
+	}
+
+	result_file.close();
+	cout << endl;
+	cout << "Stop write in file" << endl;
+}
+
 void create_matr(ifstream& file, double *matr, double size) {
 	for (int i = 0; i < size; ++i) {
 		file >> matr[i];
@@ -336,7 +350,6 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	//stop_eps = (stop_norm / stop_norm2);
 	//stop_eps = 1;
 
-
 	//mb norm like scalar not norm (|| ||) itself - yep
 	while( !(stop_eps < Eps) ) {
 		cout << "Start of iter" << endl;
@@ -409,6 +422,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		cout << "x_k1[0-9]: " << endl;
 		show_vec(x_k1, 10);
 
+		write_in_file(x_k1, 1000);
+
 		nullify(tmp);
 		//stop deal
 		//rA*x_k
@@ -440,6 +455,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		nullify(tmp);
 		nullify(rApk);
 		cout << "End of iter" << endl;
+				
 		clock_t end_CGMR = clock();
 
 		double CGMR_time = double(end_CGMR - begin_CGMR) / CLOCKS_PER_SEC;

@@ -50,9 +50,21 @@ void showm(double * ptr, int start, int size) {
 }
 
 void showv(double * ptr, int start, int size) {
-	for (int i = start; i < start + size; i++) {
-		cout << ptr[i] << endl;
+	//for (int i = start; i < start + size; i++) {
+	//	cout << ptr[i] << endl;
+	//}
+
+	fstream result_file;
+	result_file.open("result_example.txt");
+	
+	for (int i = start; i < start + size; ++i) {
+		result_file << ptr[i] << endl;
 	}
+	
+	result_file.close();
+	cout << endl;
+	cout << "Wrote in file" << endl;
+
 }
 
 void addm(double * A, double * B, double * C) {
@@ -415,19 +427,8 @@ int main() {
 
 	// show result and exit
 
-	showv(y[0], 0, 10);
+	showv(y[0], 0, 1000);
 
-	fstream result_file;
-	result_file.open("result_example.txt");
-
-	for (int i = 0; i < 10; ++i) {
-		result_file << y[i] << endl;
-	}
-	
-	result_file.close();
-
-	cout << endl;
-	cout << "Wrote in file" << endl;
 	system("pause");
 	return 0;
 }
