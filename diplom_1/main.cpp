@@ -269,7 +269,7 @@ double stop_deal(double *rA, double *x_k1, double *F) {
 	return (stop_norm / stop_norm2);
 }*/
 
-void CGMR(double *A, double *F) {
+void CGMR(double *A, double *F, clock_t begin_algo) {
 	const double Eps = 0.1;
 
 	//const double l_size = 9;
@@ -283,7 +283,7 @@ void CGMR(double *A, double *F) {
 	double bk = 0;
 	
 	//const coef a
-	double alpha = 0;
+	double alpha = 0.01;
 
 	//tmp
 	double *tmp = new double[S];
@@ -321,7 +321,7 @@ void CGMR(double *A, double *F) {
 	clock_t end_make_prep = clock();
 
 	double p_time = double(end_make_prep - begin_make_prep) / CLOCKS_PER_SEC;
-	cout << "Preperation rA, r, p: " << p_time << endl;
+	cout << "Preperation rA, r, p: " << p_time << endl << endl;
 
 	//stop deal before cycle
 	//rA*x_k						| = 0 |
@@ -444,6 +444,10 @@ void CGMR(double *A, double *F) {
 
 		double CGMR_time = double(end_CGMR - begin_CGMR) / CLOCKS_PER_SEC;
 		cout << "Runtime of iter: " << CGMR_time << endl << endl;
+
+		clock_t end_algo = clock();
+		double algo_time = double(end_algo - begin_algo) / CLOCKS_PER_SEC;
+		cout << "Runtime of algo: " << algo_time << endl << endl;
 	}
 	delete(x);
 	delete(r);
@@ -459,6 +463,7 @@ void CGMR(double *A, double *F) {
 
 void main() {
 	//MAKE BIG MATRIX WITH POSITIONS BUT ONLY WITH NECCESERY VALUES
+	clock_t begin_algo = clock();
 
 	double *matr_A = new double[S * 7];
 	double *matr_F = new double[S];
@@ -478,7 +483,7 @@ void main() {
 	A.close();
 	F.close();
 
-	CGMR(matr_A, matr_F);
+	CGMR(matr_A, matr_F, begin_algo);
 
 	clock_t end = clock();
 	double time = double(end - begin) / CLOCKS_PER_SEC;

@@ -53,16 +53,6 @@ void showv(double * ptr, int start, int size) {
 	for (int i = start; i < start + size; i++) {
 		cout << ptr[i] << endl;
 	}
-
-	cout << "Write in file" << endl;
-
-	FILE *result_file;
-	result_file = fopen("result.txt", "w+b");
-
-	fwrite(ptr, sizeof(double), start + size, result_file);
-	fclose(result_file);
-
-	cout << endl;
 }
 
 void addm(double * A, double * B, double * C) {
@@ -236,12 +226,12 @@ int prep() {
 	ifstream A5f;
 	ifstream Ff;
 
-	A1f.open("A1.dat");
-	A2f.open("A2.dat");
-	A3f.open("A3.dat");
-	A4f.open("A4.dat");
-	A5f.open("A5.dat");
-	Ff.open("F");
+	A1f.open("original_data/A1.dat");
+	A2f.open("original_data/A2.dat");
+	A3f.open("original_data/A3.dat");
+	A4f.open("original_data/A4.dat");
+	A5f.open("original_data/A5.dat");
+	Ff.open("original_data/F");
 
 	if (A1f.is_open() && A2f.is_open() && A3f.is_open()
 		&& A4f.is_open() && A5f.is_open() && Ff.is_open()) {
@@ -426,6 +416,18 @@ int main() {
 	// show result and exit
 
 	showv(y[0], 0, 10);
+
+	fstream result_file;
+	result_file.open("result_example.txt");
+
+	for (int i = 0; i < 10; ++i) {
+		result_file << y[i] << endl;
+	}
+	
+	result_file.close();
+
+	cout << endl;
+	cout << "Wrote in file" << endl;
 	system("pause");
 	return 0;
 }
