@@ -1,4 +1,4 @@
-// Итерац. МСГ с регуляризацией на процессоре, многоядерном процессоре и видеокарте
+// Итерац. МСГ с регуляризацией на процессоре[, многоядерном процессоре и видеокарте]
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -96,15 +96,20 @@ void create_matr(ifstream& file, double *matr, double size) {
 	}
 }*/
 
-//size = sizeof(matr) ?(!warn about sizeof!)?
-void show_matr(double *matr, double size) {
+void show_vec(double *matr, double size) {
 	for (int i = 0; i < size; ++i) {
 		cout << matr[i] << "; ";
 	}
 	cout << endl;
 }
 
-//add res_matr?
+void mult_vec_on_num(double *vec, double num, double *res_vec) {
+	for (int i = 0; i < S; ++i) {
+		res_vec[i] = vec[i] * num;
+	}
+}
+
+/*useless
 void mult_matr_on_num(double *matr, double num, double *res_matr, double size) {
 	for (int i = 0; i < size; ++i) {
 		res_matr[i] = matr[i] * num;
@@ -112,43 +117,55 @@ void mult_matr_on_num(double *matr, double num, double *res_matr, double size) {
 		//debug
 		//cout << "mult matr on num debug: " << res_matr[i] << " = " << matr[i] << " * " << num << endl;
 	}
-}
+}*/
 
-//rework?
-void mult_A_on_alpha_E(double *matr, double alpha, double *res_matr) {
+//function changing original matrix A
+void mult_A_on_alpha_E(double *matr, double alpha) {
 	for (int i = 0; i < S; ++i) {
 		if (i == 0) {
 			matr[i] = matr[i] + alpha;
 		}
 		else if (i > 0 && i < 247) {
-			matr[i * 7 + 1] = matr[i] + alpha;
+			matr[i * 7 + 1] = matr[i * 7 + 1] + alpha;
 		}
 		else if (i > 246 && i < 494) {
-			matr[i * 7 + 2] = matr[i] + alpha;
+			matr[i * 7 + 2] = matr[i * 7 + 2] + alpha;
 		}
 		else if (i > 493 && i < 134368) {
-			matr[i * 7 + 3] = matr[i] + alpha;
+			matr[i * 7 + 3] = matr[i * 7 + 3] + alpha;
 		}
 		else if (i > 134367 && i < 134615) {
-			matr[i * 7 + 4] = matr[i] + alpha;
+			matr[i * 7 + 4] = matr[i * 7 + 4] + alpha;
 		}
 		else if (i > 134614 && i < 134861) {
-			matr[i * 7 + 5] = matr[i] + alpha;
+			matr[i * 7 + 5] = matr[i * 7 + 5] + alpha;
 		}
 		else if (i == 134861) { //944034
-			matr[i * 7 + 6] = matr[i] + alpha;
+			matr[i * 7 + 6] = matr[i * 7 + 6] + alpha;
 		}
 	}
 }
 
+void sum_vec(double *vec_one, double *vec_two, double *res_vec) {
+	for (int i = 0; i < S; ++i) {
+		res_vec[i] = vec_one[i] + vec_two[i];
+	}
+}
+
+/*useless
 void sum_matr(double *matr_one, double *matr_two, double *res_matr, double size) {
 	for (int i = 0; i < size; ++i) {
 		res_matr[i] = matr_one[i] + matr_two[i];
 	}
+}*/
+
+void dif_vec(double *vec_one, double *vec_two, double *res_vec) {
+	for (int i = 0; i < S; ++i) {
+		res_vec[i] = vec_one[i] - vec_two[i];
+	}
 }
 
-
-//warn about size! (now for vector's size)
+/*warn about size! (now for vector's size)
 void dif_matr(double *matr_one, double *matr_two, double *res_matr) {
 	for (int i = 0; i < 3; ++i) {
 		res_matr[i] = matr_one[i] - matr_two[i];
@@ -156,7 +173,7 @@ void dif_matr(double *matr_one, double *matr_two, double *res_matr) {
 		//debug
 		//cout << "debug: " << res_matr[i] << " = " << matr_one[i] << " - " << matr_two[i] << endl;
 	}
-}
+}*/
 
 void matr_on_vec(double *matr, double *vec, double *res_vec) {
 	int second_count = 0;
@@ -223,7 +240,6 @@ double norm_vec(double *vec) {
 	return sqrt(res);
 }
 
-//size?
 void copy_vec(double *matr_one, double *matr_two) {
 	for (int i = 0; i < S; ++i) {
 		matr_one[i] = matr_two[i];
@@ -235,7 +251,7 @@ void nullify(double *vec) {
 		vec[i] = 0;
 	}
 }
-//stop deal (rework!)
+/*stop deal (rework!)
 double stop_deal(double *rA, double *x_k1, double *F) {
 	double *stop = NULL;
 	double *tmp = NULL;
@@ -251,13 +267,13 @@ double stop_deal(double *rA, double *x_k1, double *F) {
 	stop_norm2 = norm_vec(F);
 	//stop_deal = stop_norm / stop_norm2
 	return (stop_norm / stop_norm2);
-}
+}*/
 
 void CGMR(double *A, double *F) {
 	const double Eps = 0.1;
 
 	//const double l_size = 9;
-	double *rA = new double[S * 7];
+	//double *rA = new double[S * 7];
 	double *x = new double[S];
 	double *r = new double[S];
 	double *p = new double[S];
@@ -270,12 +286,12 @@ void CGMR(double *A, double *F) {
 	double alpha = 0;
 
 	//tmp
-	double *matr_tmp = new double[S * 7];
 	double *tmp = new double[S];
+	double *rApk = new double[S];
+	double *stop = new double[S];
 	double *r_k1 = new double[S];
 	double *x_k1 = new double[S];
 	double *p_k1 = new double[S];
-	double *stop = new double[S];
 	double stop_norm = 0;
 	double stop_norm2 = 0;
 	double norm = 0;
@@ -283,19 +299,29 @@ void CGMR(double *A, double *F) {
 	double vov = 0;
 	double stop_eps = 1;
 
+	clock_t begin_zero_filling = clock();
 	for (int i = 0; i < S; ++i) {
 		x[i] = r[i] = p[i] = 0;
 		stop[i] = tmp[i] = r_k1[i] = x_k1[i] = p_k1[i] = 0;
 	}
+	clock_t end_zero_filling = clock();
 
+	double z_time = double(end_zero_filling - begin_zero_filling) / CLOCKS_PER_SEC;
+	cout << "Zero_filling_preperation: " << z_time << endl;
+
+	clock_t begin_make_prep = clock();
 	//making const rA
 	//rA = A + alpha*E
-	mult_A_on_alpha_E(A, alpha, rA);
+	mult_A_on_alpha_E(A, alpha);
 
 	//r = b-rA*x0	|rA*x0 = 0| |r = b|
 	copy_vec(r, F);
 	//p = r;
 	copy_vec(p, r);
+	clock_t end_make_prep = clock();
+
+	double p_time = double(begin_make_prep - end_make_prep) / CLOCKS_PER_SEC;
+	cout << "Preperation rA, r, p: " << p_time << endl;
 
 	//stop deal before cycle
 	//rA*x_k						| = 0 |
@@ -314,30 +340,30 @@ void CGMR(double *A, double *F) {
 	//mb norm like scalar not norm (|| ||) itself - yep
 	while( !(stop_eps < Eps) ) {
 		cout << "Start of iter" << endl;
-		
+		clock_t begin_CGMR = clock();
+
 		//ak = norm(r_k)^2 / (rA*p_k, p_k)
 		//norm(r_k)^2
 			//norm = pow(norm_vec(r), 2);
 		norm = vec_on_vec(r, r);
 		//rA*p_k
-		matr_on_vec(rA, p, tmp);
+		matr_on_vec(A, p, rApk);
 		//(rA*p_k, p_k)
-		vov = vec_on_vec(tmp, p);
+		vov = vec_on_vec(rApk, p);
 		//ak = ...
 		ak = (isnan(norm / vov) ? 0 : (norm / vov));
 		
-		nullify(tmp);
 		//r_k+1 = r_k - ak*rA*p_k
 		//rA*p_k
-		matr_on_vec(rA, p, tmp);
+		//matr_on_vec(A, p, tmp);
 			//cout << "rA*pk: " << endl;
 			//show_matr(tmp, 3);
 		//ak*(rA*p_k)
-		mult_matr_on_num(tmp, ak, tmp, 3);
+		mult_vec_on_num(rApk, ak, tmp);
 			//cout << "ak*rA*pk: " << endl;
 			//show_matr(tmp, 3);
 		//r_k+1 = r_k - ...
-		dif_matr(r, tmp, r_k1);
+		dif_vec(r, tmp, r_k1);
 
 		//cout << "r_k: " << endl;
 		//show_matr(r, 3);
@@ -349,9 +375,9 @@ void CGMR(double *A, double *F) {
 			//tmp = p;
 			//copy_vec(tmp, p);
 		//ak*p_k
-		mult_matr_on_num(p, ak, tmp, 3);
+		mult_vec_on_num(p, ak, tmp);
 		//x_k+1 = x_k + ...
-		sum_matr(x, tmp, x_k1, 3);
+		sum_vec(x, tmp, x_k1);
 
 		//bk = norm(r_k+1)^2 / norm(r_k)^2
 		//norm(r_k+1)^2
@@ -361,16 +387,16 @@ void CGMR(double *A, double *F) {
 			//norm2 = pow(norm_vec(r), 2);
 		norm2 = vec_on_vec(r, r);
 		//bk = ...
-		bk = (isnan(norm / norm2) ? 0 : norm / norm2);
+		bk = (isnan(norm / norm2) ? 0 : (norm / norm2));
 
 		nullify(tmp);
 		//p_k+1 = r_k+1 + bk*p_k
 		//bk*p_k
 			//tmp = p;
 			//copy_vec(tmp, p);
-		mult_matr_on_num(p, bk, tmp, 3);
+		mult_vec_on_num(p, bk, tmp);
 		//p_k+1 = r_k+1 + ...
-		sum_matr(r_k1, tmp, p_k1, 3);
+		sum_vec(r_k1, tmp, p_k1);
 
 		//cout << "p_k: " << endl;
 		//show_matr(p, 3);
@@ -378,23 +404,23 @@ void CGMR(double *A, double *F) {
 		//show_matr(p_k1, 3);
 		
 		//show results
-		cout << "coefs:" << endl << "alpha: " << alpha << "; ak: " << ak << "; bk: " << bk << endl;
+		cout << "alpha: " << alpha << "; ak: " << ak << "; bk: " << bk << endl;
 
-		cout << "x_k1: " << endl;
-		show_matr(x_k1, 3);
+		cout << "x_k1[0-9]: " << endl;
+		show_vec(x_k1, 10);
 
 		nullify(tmp);
 		//stop deal
 		//rA*x_k
-		matr_on_vec(rA, x_k1, stop);
+		matr_on_vec(A, x_k1, stop);
 		//rA*x_k - b
-		dif_matr(stop, F, tmp);
+		dif_vec(stop, F, tmp);
 		//norm(rA*x_k - b)
 		stop_norm = norm_vec(tmp);
 		//norm(b)
 		stop_norm2 = norm_vec(F);
 		//stop_deal = stop_norm / stop_norm2
-		stop_eps = (stop_norm / stop_norm2);
+		stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
 		cout << "Stop deal: " << stop_eps << " " << ((stop_eps < Eps) ? "<" : ">") << " " << Eps << endl;
 		//boolalpha << 
@@ -406,27 +432,32 @@ void CGMR(double *A, double *F) {
 		copy_vec(x, x_k1);
 		//r = r_k1;
 		copy_vec(r, r_k1);
-		//clear stop
+		//clear vectors
 		nullify(stop);
 		nullify(p_k1);
 		nullify(x_k1);
 		nullify(r_k1);
+		nullify(tmp);
+		nullify(rApk);
 		cout << "End of iter" << endl << endl;
+		clock_t end_CGMR = clock();
+
+		double CGMR_time = double(begin_CGMR - end_CGMR) / CLOCKS_PER_SEC;
+		cout << "Preperation rA, r, p: " << CGMR_time << endl;
 	}
+	delete(x);
+	delete(r);
+	delete(p);
+	delete(x_k1);
+	delete(r_k1);
+	delete(p_k1);
+	delete(tmp);
+	delete(rApk);
+	delete(stop);
 
-}
-
-void create_big_matrix() {
-	
 }
 
 void main() {
-
-	//const double matr_size = 9;
-	//double *matr_A = new double[matr_size];
-	//double *matr_E = new double[matr_size];
-	//double *matr_F = new double[matr_size / 3];
-
 	//MAKE BIG MATRIX WITH POSITIONS BUT ONLY WITH NECCESERY VALUES
 
 	double *matr_A = new double[S * 7];
@@ -438,7 +469,7 @@ void main() {
 
 	clock_t begin = clock();
 
-	A.open("result.dat");	// 134862 * 3
+	A.open("result.dat");	// 134862 * 7
 	F.open("F.dat");		// 134862
 
 	create_matr(A, matr_A, S * 7);
@@ -451,7 +482,10 @@ void main() {
 
 	clock_t end = clock();
 	double time = double(end - begin) / CLOCKS_PER_SEC;
-	cout << "Time of calc: " << time << endl;
+	cout << "Runtime: " << time << endl;
+
+	delete(matr_A);
+	delete(matr_F);
 
 	system("pause");
 }
