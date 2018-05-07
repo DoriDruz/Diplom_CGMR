@@ -297,7 +297,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	double bk = 0;
 	
 	//const coef a
-	double alpha = 0.01;
+	double alpha = 0.05;
 
 	//tmp
 	double *tmp = new double[S];
@@ -312,6 +312,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	double norm2 = 0;
 	double vov = 0;
 	double stop_eps = 1;
+
+	int count_tmp = 0;
 
 	clock_t begin_zero_filling = clock();
 	for (int i = 0; i < S; ++i) {
@@ -350,8 +352,12 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	//stop_eps = (stop_norm / stop_norm2);
 	//stop_eps = 1;
 
+	//CHECK FOR TRUE UPDATE ALL VECTORS !
+
 	//mb norm like scalar not norm (|| ||) itself - yep
-	while( !(stop_eps < Eps) ) {
+	while( !(stop_eps < Eps) && count_tmp < S) {
+		//system("cls");
+
 		cout << "Start of iter" << endl;
 		clock_t begin_CGMR = clock();
 
@@ -422,7 +428,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		cout << "x_k1[0-9]: " << endl;
 		show_vec(x_k1, 10);
 
-		write_in_file(x_k1, 1000);
+		//write_in_file(x_k1, 1000);
 
 		nullify(tmp);
 		//stop deal
@@ -450,7 +456,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//clear vectors
 		nullify(stop);
 		nullify(p_k1);
-		nullify(x_k1);
+		//nullify(x_k1);
 		nullify(r_k1);
 		nullify(tmp);
 		nullify(rApk);
@@ -463,7 +469,17 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 		clock_t end_algo = clock();
 		double algo_time = double(end_algo - begin_algo) / CLOCKS_PER_SEC;
-		cout << "Runtime of algo: " << algo_time << endl << endl;
+		cout << "Runtime of algo: " << algo_time << endl;
+
+		count_tmp++;
+		cout << "Number of iter: " << count_tmp << " / " << S << endl << endl;
+
+		if (count_tmp == S) {
+			write_in_file(x_k1, 1000);
+		}
+		else {
+			nullify(x_k1);
+		}
 	}
 	delete(x);
 	delete(r);
