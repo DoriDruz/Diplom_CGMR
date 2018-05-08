@@ -9,6 +9,13 @@ using namespace std;
 //global
 const int S = 134862;
 
+void add_in_file(double nev) {
+	ofstream nevyazka;
+	nevyazka.open("nevyazka.dat", ios_base::app);
+	nevyazka << nev << endl;
+	nevyazka.close();
+}
+
 void write_in_file(double *vec, double size) {
 	clock_t begin_write = clock();
 
@@ -356,7 +363,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	//stop_eps = (stop_norm / stop_norm2);
 	//stop_eps = 1;
 
-	//CHECK FOR TRUE UPDATE ALL VECTORS !
+	//WHY NEVYAZKA INCREASING ?
 
 	//mb norm like scalar not norm (|| ||) itself - yep
 	while( !(stop_eps < Eps) && count_tmp < S) {
@@ -438,16 +445,18 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop deal
 		//rA*x_k
 		matr_on_vec(A, x_k1, stop);
-			//write_in_file(stop, S);
-			//break;
 		//rA*x_k - b
 		dif_vec(stop, F, tmp);
 		//norm(rA*x_k - b)
 		stop_norm = norm_vec(tmp);
+			//stop_norm = sqrt(vec_on_vec(tmp, tmp));
 		//norm(b) - можно вынести как константу
 		stop_norm2 = norm_vec(F);
+			//stop_norm2 = sqrt(vec_on_vec(F, F));
 		//stop_deal = stop_norm / stop_norm2
 		stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
+
+		add_in_file(stop_eps);
 
 		cout << "Stop deal: " << stop_eps << " " << ((stop_eps < Eps) ? "<" : ">") << " " << Eps << endl;
 		//boolalpha << 
@@ -480,14 +489,18 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		count_tmp++;
 		cout << "Number of iter: " << count_tmp << " / " << S << endl << endl;
 
+		//tmp
+		if (count_tmp == 1000) {
+			write_in_file(x_k1, 1000);
+			break;
+		}
+
 		if (count_tmp == S) {
 			write_in_file(x_k1, S);
 		}
 		else {
 			nullify(x_k1);
 		}
-
-		system("pause");
 	}
 	delete(x);
 	delete(r);
