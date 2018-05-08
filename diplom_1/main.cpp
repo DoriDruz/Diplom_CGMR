@@ -10,17 +10,21 @@ using namespace std;
 const int S = 134862;
 
 void write_in_file(double *vec, double size) {
+	clock_t begin_write = clock();
+
 	cout << "Start write in file" << endl;
-	fstream result_file;
-	result_file.open("x_res_from_main.txt");
+	ofstream result_file;
+	result_file.open("x_res_from_main.txt", ofstream :: trunc); //x_res_from_main.txt
 
 	for (int i = 0; i < size; ++i) {
 		result_file << vec[i] << endl;
 	}
 
 	result_file.close();
-	cout << endl;
-	cout << "Stop write in file" << endl;
+
+	clock_t end_write = clock();
+	double write_time = double(end_write - begin_write) / CLOCKS_PER_SEC;
+	cout << "Stop write in file: " << write_time << endl;
 }
 
 void create_matr(ifstream& file, double *matr, double size) {
@@ -434,11 +438,13 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop deal
 		//rA*x_k
 		matr_on_vec(A, x_k1, stop);
+			//write_in_file(stop, S);
+			//break;
 		//rA*x_k - b
 		dif_vec(stop, F, tmp);
 		//norm(rA*x_k - b)
 		stop_norm = norm_vec(tmp);
-		//norm(b)
+		//norm(b) - можно вынести как константу
 		stop_norm2 = norm_vec(F);
 		//stop_deal = stop_norm / stop_norm2
 		stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
@@ -475,11 +481,13 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		cout << "Number of iter: " << count_tmp << " / " << S << endl << endl;
 
 		if (count_tmp == S) {
-			write_in_file(x_k1, 1000);
+			write_in_file(x_k1, S);
 		}
 		else {
 			nullify(x_k1);
 		}
+
+		system("pause");
 	}
 	delete(x);
 	delete(r);
@@ -493,12 +501,35 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 }
 
+void tmp_func() {
+	double *matr_1 = new double[S];
+	double *matr_2 = new double[S];
+	double *matr_tmp = new double[S];
+	double num_tmp = 0;
+
+	for (int i = 0; i < S; ++i) {
+		matr_1[i] = 1;
+		matr_2[i] = 1;
+	}
+
+	num_tmp = vec_on_vec(matr_1, matr_2);
+	write_in_file(matr_tmp, S);
+	cout << num_tmp << endl;
+}
+
 void main() {
 	//MAKE BIG MATRIX WITH POSITIONS BUT ONLY WITH NECCESERY VALUES
 	clock_t begin_algo = clock();
 
 	double *matr_A = new double[S * 7];
 	double *matr_F = new double[S];
+
+	double *matr_tmp = new double[S];
+	double *matr_tmp_res = new double[S];
+
+	for (int i = 0; i < S; ++i) {
+		matr_tmp[i] = 1;
+	}
 
 	ifstream A;
 	ifstream F;
@@ -514,6 +545,9 @@ void main() {
 
 	A.close();
 	F.close();
+
+	//matr_on_vec(matr_A, matr_tmp, matr_tmp_res);
+	//write_in_file(matr_tmp_res, S);
 
 	CGMR(matr_A, matr_F, begin_algo);
 
