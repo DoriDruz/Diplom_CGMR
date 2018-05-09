@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <iomanip>
 
 using namespace std;
 
@@ -16,15 +17,15 @@ void add_in_file(double nev) {
 	nevyazka.close();
 }
 
-void write_in_file(double *vec, double size) {
+void write_in_file(double *vec, double size, string name) {
 	clock_t begin_write = clock();
 
 	cout << "Start write in file" << endl;
 	ofstream result_file;
-	result_file.open("x_res_from_main.txt", ofstream :: trunc); //x_res_from_main.txt
+	result_file.open(name, ofstream :: trunc); //x_res_from_main.txt
 
 	for (int i = 0; i < size; ++i) {
-		result_file << vec[i] << endl;
+		result_file << setprecision(16) << vec[i] << endl;
 	}
 
 	result_file.close();
@@ -36,7 +37,7 @@ void write_in_file(double *vec, double size) {
 
 void create_matr(ifstream& file, double *matr, double size) {
 	for (int i = 0; i < size; ++i) {
-		file >> matr[i];
+		file >> setprecision(16) >> matr[i];
 	}
 }
 
@@ -123,7 +124,7 @@ void create_matr(ifstream& file, double *matr, double size) {
 
 void show_vec(double *matr, double size) {
 	for (int i = 0; i < size; ++i) {
-		cout << matr[i] << "; ";
+		cout << setprecision(16) << matr[i] << "; ";
 	}
 	cout << endl;
 }
@@ -206,42 +207,164 @@ void matr_on_vec(double *matr, double *vec, double *res_vec) {
 	int fourth_count = 0;
 	int fifth_count = 0;
 	int sixth_count = 0;
+
+	//debug
+	//ofstream debug_f;
+	//debug_f.open("debug.dat", ios_base::app);
+
 	for (int i = 0; i < S; ++i) {
 		if (i == 0) {
-			res_vec[i] = matr[0] * vec[0] + matr[1] * vec[1] + matr[2] * vec[247] + matr[3] * vec[494];
+			res_vec[i] = \
+				matr[0] * vec[0] \
+				+ matr[1] * vec[1] \
+				+ matr[2] * vec[247] \
+				+ matr[3] * vec[494];
+
+			/*debug
+			debug_f << i << ": " << res_vec[i] << " = " \
+				<< matr[0] << " * " << vec[0] << " + " \
+				<< matr[1] << " * " << vec[1] << " + " \
+				<< matr[2] << " * " << vec[247] << " + " \
+				<< matr[3] << " * " << vec[494] \
+				<< endl;
+				*/
 		}
 		else if (i > 0 && i < 247) {
-			res_vec[i] = matr[7 * i] * vec[second_count] + matr[7 * i + 1] * vec[second_count + 1] + matr[7 * i + 2] * vec[second_count + 2] \
-				+ matr[7 * i + 3] * vec[second_count + 248] + matr[7 * i + 4] * vec[second_count + 495];
+			res_vec[i] = \
+				matr[7 * i] * vec[second_count] \
+				+ matr[7 * i + 1] * vec[second_count + 1] \
+				+ matr[7 * i + 2] * vec[second_count + 2] \
+				+ matr[7 * i + 3] * vec[second_count + 248] \
+				+ matr[7 * i + 4] * vec[second_count + 495];
+
+			/*debug
+			if(i == 1) {
+			debug_f << i << ": " << res_vec[i] << " = " \
+				<< matr[7 * i] << " * " << vec[second_count] << " + " \
+				<< matr[7 * i + 1] << " * " << vec[second_count + 1] << " + " \
+				<< matr[7 * i + 2] << " * " << vec[second_count + 2] << " + " \
+				<< matr[7 * i + 3] << " * " << vec[second_count + 248] << " + " \
+				<< matr[7 * i + 4] << " * " << vec[second_count + 495] \
+				<< endl;
+			}*/
+
 			second_count++;
 		}
 		else if (i > 246 && i < 494) {
-			res_vec[i] = matr[7 * i] * vec[third_count] + matr[7 * i + 1] * vec[third_count + 246] + matr[7 * i + 2] * vec[third_count + 247] + matr[7 * i + 3] * vec[third_count + 248] \
-				+ matr[7 * i + 4] * vec[third_count + 494] + matr[7 * i + 5] * vec[third_count + 741];
+			res_vec[i] = \
+				matr[7 * i] * vec[third_count] \
+				+ matr[7 * i + 1] * vec[third_count + 246] \
+				+ matr[7 * i + 2] * vec[third_count + 247] \
+				+ matr[7 * i + 3] * vec[third_count + 248] \
+				+ matr[7 * i + 4] * vec[third_count + 494] \
+				+ matr[7 * i + 5] * vec[third_count + 741];
+
+			/*debug
+			if (i == 247) {
+				debug_f << i << ": " << res_vec[i] << " = " \
+					<< matr[7 * i] << " * " << vec[third_count] << " + " \
+					<< matr[7 * i + 1] << " * " << vec[third_count + 246] << " + " \
+					<< matr[7 * i + 2] << " * " << vec[third_count + 247] << " + " \
+					<< matr[7 * i + 3] << " * " << vec[third_count + 248] << " + " \
+					<< matr[7 * i + 4] << " * " << vec[third_count + 494] << " + " \
+					<< matr[7 * i + 5] << " * " << vec[third_count + 741] \
+					<< endl;
+			}*/
+
 			third_count++;
 		}
 		else if (i > 493 && i < 134368) {
-			res_vec[i] = matr[7 * i] * vec[fourth_count] + matr[7 * i + 1] * vec[fourth_count + 247] + matr[7 * i + 2] * vec[fourth_count + 493] + matr[7 * i + 3] * vec[fourth_count + 494] \
-				+ matr[7 * i + 4] * vec[fourth_count + 495] + matr[7 * i + 5] * vec[fourth_count + 741] + matr[7 * i + 6] * vec[fourth_count + 988];
+			res_vec[i] = \
+				matr[7 * i] * vec[fourth_count] \
+				+ matr[7 * i + 1] * vec[fourth_count + 247] \
+				+ matr[7 * i + 2] * vec[fourth_count + 493] \
+				+ matr[7 * i + 3] * vec[fourth_count + 494] \
+				+ matr[7 * i + 4] * vec[fourth_count + 495] \
+				+ matr[7 * i + 5] * vec[fourth_count + 741] \
+				+ matr[7 * i + 6] * vec[fourth_count + 988];
+
+			/*debug
+			if (i == 494) {
+				debug_f << i << ": " << res_vec[i] << " = " \
+					<< matr[7 * i] << " * " << vec[fourth_count] << " + " \
+					<< matr[7 * i + 1] << " * " << vec[fourth_count + 247] << " + " \
+					<< matr[7 * i + 2] << " * " << vec[fourth_count + 493] << " + " \
+					<< matr[7 * i + 3] << " * " << vec[fourth_count + 494] << " + " \
+					<< matr[7 * i + 4] << " * " << vec[fourth_count + 495] << " + " \
+					<< matr[7 * i + 5] << " * " << vec[fourth_count + 741] << " + " \
+					<< matr[7 * i + 6] << " * " << vec[fourth_count + 988] \
+					<< endl;
+			}*/
+
 			fourth_count++;
 		}
 		else if (i > 134367 && i < 134615) {
-			res_vec[i] = matr[7 * i + 1] * vec[fifth_count + 133874] + matr[7 * i + 2] * vec[fifth_count + 134121] + matr[7 * i + 3] * vec[fifth_count + 134367] \
-				+ matr[7 * i + 4] * vec[fifth_count + 134368] + matr[7 * i + 5] * vec[fifth_count + 134369] + matr[7 * i + 6] * vec[fifth_count + 134615];
+			res_vec[i] = \
+				matr[7 * i + 1] * vec[fifth_count + 133874] \
+				+ matr[7 * i + 2] * vec[fifth_count + 134121] \
+				+ matr[7 * i + 3] * vec[fifth_count + 134367] \
+				+ matr[7 * i + 4] * vec[fifth_count + 134368] \
+				+ matr[7 * i + 5] * vec[fifth_count + 134369] \
+				+ matr[7 * i + 6] * vec[fifth_count + 134615];
+
+			/*debug
+			if (i == 134368) {
+				debug_f << i << ": " << res_vec[i] << " = " \
+					<< matr[7 * i + 1] << " * " << vec[fifth_count + 133874] << " + " \
+					<< matr[7 * i + 2] << " * " << vec[fifth_count + 134121] << " + " \
+					<< matr[7 * i + 3] << " * " << vec[fifth_count + 134367] << " + " \
+					<< matr[7 * i + 4] << " * " << vec[fifth_count + 134368] << " + " \
+					<< matr[7 * i + 5] << " * " << vec[fifth_count + 134369] << " + " \
+					<< matr[7 * i + 6] << " * " << vec[fifth_count + 134615] \
+					<< endl;
+			}*/
+
 			fifth_count++;
 		}
 		else if (i > 134614 && i < 134861) {
-			res_vec[i] = matr[7 * i + 2] * vec[sixth_count + 134121] + matr[7 * i + 3] * vec[sixth_count + 134368] + matr[7 * i + 4] * vec[sixth_count + 134614] + \
-				+ matr[7 * i + 5] * vec[sixth_count + 134615] + matr[7 * i + 6] * vec[sixth_count + 134616];
+			res_vec[i] = \
+				matr[7 * i + 2] * vec[sixth_count + 134121] \
+				+ matr[7 * i + 3] * vec[sixth_count + 134368] \
+				+ matr[7 * i + 4] * vec[sixth_count + 134614] \
+				+ matr[7 * i + 5] * vec[sixth_count + 134615] \
+				+ matr[7 * i + 6] * vec[sixth_count + 134616];
+
+			/*debug
+			if (i == 134615) {
+				debug_f << i << ": " << res_vec[i] << " = " \
+					<< matr[7 * i + 2] << " * " << vec[sixth_count + 134121] << " + " \
+					<< matr[7 * i + 3] << " * " << vec[sixth_count + 134368] << " + " \
+					<< matr[7 * i + 4] << " * " << vec[sixth_count + 134614] << " + " \
+					<< matr[7 * i + 5] << " * " << vec[sixth_count + 134615] << " + " \
+					<< matr[7 * i + 6] << " * " << vec[sixth_count + 134616] \
+					<< endl;
+			}*/
+
 			sixth_count++;
 		}
 		else if (i == 134861) { //last_element_position = 944034
-			res_vec[i] = matr[7 * i + 3] * vec[134367] + matr[7 * i + 4] * vec[134614] + matr[7 * i + 5] * vec[134860] + matr[7 * i + 6] * vec[134861];
-		}
-		
+			res_vec[i] = \
+				matr[7 * i + 3] * vec[134367] \
+				+ matr[7 * i + 4] * vec[134614] \
+				+ matr[7 * i + 5] * vec[134860] \
+				+ matr[7 * i + 6] * vec[134861];
+
+			/*debug
+			debug_f << i << ": " << res_vec[i] << " = " \
+				<< matr[7 * i + 3] << " * " << vec[134367] << " + " \
+				<< matr[7 * i + 4] << " * " << vec[134614] << " + " \
+				<< matr[7 * i + 5] << " * " << vec[134860] << " + " \
+				<< matr[7 * i + 6] << " * " << vec[134861] \
+				<< endl;
+		}*/
+
 		//debug
 		//cout << "i: " << i << " j: " << j  << " res_vec: " << res_vec[i] << " matr: " << matr[3 * i + j] << " vec: " << vec[j] <<  endl;
-		
+
+		}
+
+		//debug
+		//debug_f.close();
 	}
 }
 
@@ -308,7 +431,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	double bk = 0;
 	
 	//const coef a
-	double alpha = 0.05;
+	double alpha = 0;
 
 	//tmp
 	double *tmp = new double[S];
@@ -326,6 +449,17 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 	int count_tmp = 0;
 
+	//clear file with nevyazka
+	ofstream nevyazka_file;
+	nevyazka_file.open("nevyazka.dat", ofstream::trunc);
+	nevyazka_file.close();
+
+	//clear file with debug
+	ofstream debug_f;
+	debug_f.open("debug.dat", ofstream::trunc);
+	debug_f.close();
+
+	//fill all arrays with zeroes
 	clock_t begin_zero_filling = clock();
 	for (int i = 0; i < S; ++i) {
 		x[i] = r[i] = p[i] = 0;
@@ -337,6 +471,9 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	cout << "Zero_filling_preperation: " << z_time << endl;
 
 	clock_t begin_make_prep = clock();
+	
+	//preps before algo
+
 	//making const rA
 	//rA = A + alpha*E
 	mult_A_on_alpha_E(A, alpha);
@@ -345,6 +482,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	copy_vec(r, F);
 	//p = r;
 	copy_vec(p, r);
+	
 	clock_t end_make_prep = clock();
 
 	double p_time = double(end_make_prep - begin_make_prep) / CLOCKS_PER_SEC;
@@ -363,9 +501,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	//stop_eps = (stop_norm / stop_norm2);
 	//stop_eps = 1;
 
-	//WHY NEVYAZKA INCREASING ?
+	//WHY NEVYAZKA INCREASING ? - Different data in arrays? Make zero iter out of cycle?
 
-	//mb norm like scalar not norm (|| ||) itself - yep
 	while( !(stop_eps < Eps) && count_tmp < S) {
 		//system("cls");
 
@@ -454,6 +591,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		stop_norm2 = norm_vec(F);
 			//stop_norm2 = sqrt(vec_on_vec(F, F));
 		//stop_deal = stop_norm / stop_norm2
+		stop_eps = 0;
 		stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
 		add_in_file(stop_eps);
@@ -489,14 +627,15 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		count_tmp++;
 		cout << "Number of iter: " << count_tmp << " / " << S << endl << endl;
 
-		//tmp
+		write_in_file(x_k1, 1000, "x_res_from_main.txt");
+
+		//tmp - delete last
 		if (count_tmp == 1000) {
-			write_in_file(x_k1, 1000);
-			break;
+			write_in_file(x_k1, 1000, "debug.dat");
 		}
 
 		if (count_tmp == S) {
-			write_in_file(x_k1, S);
+			write_in_file(x_k1, S, "x_res_from_main.txt");
 		}
 		else {
 			nullify(x_k1);
@@ -514,7 +653,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 }
 
-void tmp_func() {
+//tmp
+/*void tmp_func() {
 	double *matr_1 = new double[S];
 	double *matr_2 = new double[S];
 	double *matr_tmp = new double[S];
@@ -528,40 +668,36 @@ void tmp_func() {
 	num_tmp = vec_on_vec(matr_1, matr_2);
 	write_in_file(matr_tmp, S);
 	cout << num_tmp << endl;
-}
+}*/
 
 void main() {
-	//MAKE BIG MATRIX WITH POSITIONS BUT ONLY WITH NECCESERY VALUES
 	clock_t begin_algo = clock();
 
 	double *matr_A = new double[S * 7];
 	double *matr_F = new double[S];
-
-	double *matr_tmp = new double[S];
+	
+	/*double *matr_tmp = new double[S];
 	double *matr_tmp_res = new double[S];
 
 	for (int i = 0; i < S; ++i) {
 		matr_tmp[i] = 1;
-	}
+	}*/
 
 	ifstream A;
 	ifstream F;
-	ifstream E;
+	//ifstream E;
 
 	clock_t begin = clock();
 
-	A.open("result.dat");	// 134862 * 7
-	F.open("F.dat");		// 134862
+	A.open("result.dat");				// 134862 * 7	| result.dat
+	F.open("F.dat");		// 134862		| F.dat
 
 	create_matr(A, matr_A, S * 7);
 	create_matr(F, matr_F, S);
 
 	A.close();
 	F.close();
-
-	//matr_on_vec(matr_A, matr_tmp, matr_tmp_res);
-	//write_in_file(matr_tmp_res, S);
-
+	
 	CGMR(matr_A, matr_F, begin_algo);
 
 	clock_t end = clock();
