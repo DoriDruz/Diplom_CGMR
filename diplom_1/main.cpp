@@ -503,7 +503,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 	//WHY NEVYAZKA INCREASING ? - Different data in arrays? Make zero iter out of cycle?
 
-	while( !(stop_eps < Eps) && count_tmp < S) {
+	while( !(stop_eps < Eps) && count_tmp < S / 16) {
 		//system("cls");
 
 		cout << "Start of iter" << endl;
@@ -626,15 +626,13 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 		count_tmp++;
 		cout << "Number of iter: " << count_tmp << " / " << S << endl << endl;
-
-		write_in_file(x_k1, 1000, "x_res_from_main.txt");
-
+		
 		//tmp - delete last
-		if (count_tmp == 1000) {
+		if (count_tmp == S / 32) {
 			write_in_file(x_k1, 1000, "debug.dat");
 		}
 
-		if (count_tmp == S) {
+		if (count_tmp == S / 16) {
 			write_in_file(x_k1, S, "x_res_from_main.txt");
 		}
 		else {
