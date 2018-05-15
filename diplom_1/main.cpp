@@ -459,6 +459,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	debug_f.open("debug.dat", ofstream::trunc);
 	debug_f.close();
 
+	//«¿Õ”À»“‹ rApk?
+
 	//fill all arrays with zeroes
 	clock_t begin_zero_filling = clock();
 	for (int i = 0; i < S; ++i) {
