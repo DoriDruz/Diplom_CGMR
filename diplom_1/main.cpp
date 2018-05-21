@@ -343,7 +343,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	double bk = 0;
 	
 	//const coef a
-	double alpha = 0;
+	double alpha = 0.01;
 
 	//tmp
 	double *tmp = new double[S];
@@ -420,7 +420,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 			//norm = pow(norm_vec(r), 2);
 		norm = vec_on_vec(r, r);
 		//rA*p_k
-		matr_on_vec(or_A, p, rApk);
+		matr_on_vec(A, p, rApk);
 		//debug_matr_on_vec(rApk);
 		//write_in_file(F, S, "F_exp.dat");
 		//(rA*p_k, p_k)
@@ -495,7 +495,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop_eps = 0;
 		//stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
-		stop_eps = check_stop(A, F, x_k1, Eps);
+		stop_eps = check_stop(or_A, F, x_k1, Eps);
 
 		add_in_file(stop_eps);
 
@@ -542,23 +542,6 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 }
 
-//tmp
-/*void tmp_func() {
-	double *matr_1 = new double[S];
-	double *matr_2 = new double[S];
-	double *matr_tmp = new double[S];
-	double num_tmp = 0;
-
-	for (int i = 0; i < S; ++i) {
-		matr_1[i] = 1;
-		matr_2[i] = 1;
-	}
-
-	num_tmp = vec_on_vec(matr_1, matr_2);
-	write_in_file(matr_tmp, S);
-	cout << num_tmp << endl;
-}*/
-
 void main() {
 	clock_t begin_algo = clock();
 
@@ -597,4 +580,5 @@ void main() {
 
 	//last runtime: 847.723 sec.
 	//last runtime: 833.092 sec. / Iteration: 29328
+	//last runtime: 792.424 sec. / Iteration: 25619
 }
