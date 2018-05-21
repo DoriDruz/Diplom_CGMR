@@ -129,6 +129,9 @@ void nev(double *A, double *F, double *X) {
 
 	//Показываем невязку
 	cout << "Nevyazka: " << stop_num << endl;
+
+	delete(tmp);
+	delete(stop_tmp);
 }
 
 void main() {
@@ -140,19 +143,28 @@ void main() {
 	ifstream F;
 	ifstream X;
 	
-	A.open("result.dat");
+	A.open("A_with_minus_and_01.dat");
 	F.open("F.dat");
-	X.open("result_example.txt");
+	X.open("X_1.dat");
 	
 	create_matr(A, matr_A, S * 7);
 	create_matr(F, matr_F, S);
 	create_matr(X, matr_X, S);
 	
-	nev(matr_A, matr_F, matr_X);
+	if (A.is_open() && F.is_open() && X.is_open()) {
+		nev(matr_A, matr_F, matr_X);
+	}
+	else {
+		cout << "Error reading files" << endl;
+	}
 
 	A.close();
 	F.close();
 	X.close();
+
+	delete(matr_A);
+	delete(matr_F);
+	delete(matr_X);
 
 	system("pause");
 }

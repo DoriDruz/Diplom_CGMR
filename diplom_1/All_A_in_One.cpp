@@ -31,9 +31,12 @@ void main() {
 	getline(A4, header);
 	getline(A5, header);
 
-	result.open("A_alt.dat");
+	result.open("A_with_01.dat");
 
-	//REWORK FOR CORRECT NULLS?
+	if (!result.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
 
 	for (int i = 1; i <= size; ++i) {
 		cout << i <<  " / " << size << endl;
@@ -43,8 +46,8 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << "-" + tmp << " ";
-			result << "1 0 0 0" << endl; 
+			result << tmp << " ";
+			result << "0.001 0 0 0" << endl; 
 		}
 		else if (i >= 2 && i <= 247) {
 			A2 >> tmp;
@@ -54,12 +57,12 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << "-" + tmp << " ";
-			result << "1 0 0" << endl;
+			result << tmp << " ";
+			result << "0.001 0 0" << endl;
 		}
 		else if (i >= 248 && i <= 494) {
 			A1 >> tmp;
-			result << "-" + tmp << " ";
+			result << tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -67,13 +70,13 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << "-" + tmp << " ";
-			result << "1 0" << endl;
+			result << tmp << " ";
+			result << "0.001 0" << endl;
 		}
 		else if (i >= 495 && i <= 134368) {
-			result << "1" << " ";
+			result << "0.001" << " ";
 			A1 >> tmp;
-			result << "-" + tmp << " ";
+			result << tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -81,13 +84,13 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << "-" + tmp << " ";
-			result << "1" << endl;
+			result << tmp << " ";
+			result << "0.001" << endl;
 		}
 		else if (i >= 134369 && i <= 134615) {
-			result << "0 1" << " ";
+			result << "0 0.001" << " ";
 			A1 >> tmp;
-			result << "-" + tmp << " ";
+			result << tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -95,12 +98,12 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << "-" + tmp << endl;
+			result << tmp << endl;
 		}
 		else if (i >= 134616 && i <= 134861) {
-			result << "0 0 1" << " ";
+			result << "0 0 0.001" << " ";
 			A1 >> tmp;
-			result << "-" + tmp << " ";
+			result << tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -109,9 +112,9 @@ void main() {
 			result << tmp << endl;
 		}
 		else if (i == 134862) {
-			result << "0 0 0 1" << " ";
+			result << "0 0 0 0.001" << " ";
 			A1 >> tmp;
-			result << "-" + tmp << " ";
+			result << tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;

@@ -55,7 +55,7 @@ void showv(double * ptr, int start, int size) {
 	//}
 
 	fstream result_file;
-	result_file.open("result_example.txt");
+	result_file.open("X_ars.dat");
 	
 	for (int i = start; i < start + size; ++i) {
 		result_file << ptr[i] << endl;
@@ -427,7 +427,7 @@ int main() {
 
 	// show result and exit
 
-	showv(y[0], 0, 1000);
+	showv(y[0], 0, N);
 
 	system("pause");
 	return 0;

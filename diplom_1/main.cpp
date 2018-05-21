@@ -386,7 +386,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 	clock_t begin_make_prep = clock();
 	
-	//Подготовка перед алогритмом
+	//Подготовка перед алгоритмом
 
 	//copy A in or_A
 	copy_matr(or_A, A);
@@ -407,7 +407,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	
 	//WHY NEVYAZKA INCREASING ? - Different data in arrays? Make zero iter out of cycle?
 
-	while( !(stop_eps < Eps)) {
+	while( !(stop_eps < Eps) ) {
 
 		count_tmp++;
 		cout << "Iteration: " << count_tmp << " / " << S << endl;
@@ -476,8 +476,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//show results
 		//cout << "alpha: " << alpha << "; ak: " << ak << "; bk: " << bk << endl;
 
-		//cout << "x_k1[0-9]: " << endl;
-		//show_vec(x_k1, 10);
+		cout << "X[0]: " << endl;
+		show_vec(x_k1, 1);
 
 		//nullify(tmp);
 		////stop deal
@@ -495,13 +495,16 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop_eps = 0;
 		//stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
-		stop_eps = check_stop(or_A, F, x_k1, Eps);
+		stop_eps = check_stop(A, F, x_k1, Eps);
 
 		add_in_file(stop_eps);
 
 		cout << "Nev: " << stop_eps << " " << ((stop_eps < Eps) ? "<" : ">") << " " << Eps << endl << endl;
 		//boolalpha << 
-
+		if(stop_eps < Eps){
+			write_in_file(x_k1, S, "X_1.dat");
+		}
+		
 		//copy for next iter
 		//p = p_k1;
 		copy_vec(p, p_k1);
@@ -512,7 +515,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//clear vectors
 		nullify(stop);
 		nullify(p_k1);
-		//nullify(x_k1);
+		nullify(x_k1);
 		nullify(r_k1);
 		nullify(tmp);
 		nullify(rApk);
@@ -526,14 +529,6 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		clock_t end_algo = clock();
 		double algo_time = double(end_algo - begin_algo) / CLOCKS_PER_SEC;
 		//cout << "Runtime of algo: " << algo_time << endl;
-
-		if (count_tmp == S / 16) {
-			write_in_file(x_k1, S, "X_1.dat");
-			break;
-		}
-		else {
-			nullify(x_k1);
-		}
 	}
 	delete(x);
 	delete(r);
@@ -575,17 +570,22 @@ void main() {
 	
 	clock_t begin = clock();
 
-	A.open("A_alt.dat");				// 134862 * 7	| result.dat
-	F.open("F.dat");					// 134862		| F.dat
+	A.open("A_with_01.dat");				// 134862 * 7	| result.dat
+	F.open("F.dat");						// 134862		| F.dat
 
-	create_matr(A, matr_A, S * 7);
-	create_matr(F, matr_F, S);
+	if (A.is_open() && F.is_open()) {
+		create_matr(A, matr_A, S * 7);
+		create_matr(F, matr_F, S);
+	}
+	else {
+		cout << "Error opening files" << endl;
+	}
 
 	A.close();
 	F.close();
 	
 	CGMR(matr_A, matr_F, begin_algo);
-
+	
 	clock_t end = clock();
 	double time = double(end - begin) / CLOCKS_PER_SEC;
 	cout << "Runtime: " << time << endl;
@@ -594,4 +594,7 @@ void main() {
 	delete(matr_F);
 
 	system("pause");
+
+	//last runtime: 847.723 sec.
+	//last runtime: 833.092 sec. / Iteration: 29328
 }
