@@ -31,7 +31,7 @@ void main() {
 	getline(A4, header);
 	getline(A5, header);
 
-	result.open("result.dat");
+	result.open("A_alt.dat");
 
 	//REWORK FOR CORRECT NULLS?
 
@@ -43,7 +43,7 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			result << "1 0 0 0" << endl; 
 		}
 		else if (i >= 2 && i <= 247) {
@@ -54,12 +54,12 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			result << "1 0 0" << endl;
 		}
 		else if (i >= 248 && i <= 494) {
 			A1 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -67,13 +67,13 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			result << "1 0" << endl;
 		}
 		else if (i >= 495 && i <= 134368) {
 			result << "1" << " ";
 			A1 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -81,13 +81,13 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			result << "1" << endl;
 		}
 		else if (i >= 134369 && i <= 134615) {
 			result << "0 1" << " ";
 			A1 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -95,12 +95,12 @@ void main() {
 			A4 >> tmp;
 			result << tmp << " ";
 			A5 >> tmp;
-			result << tmp << endl;
+			result << "-" + tmp << endl;
 		}
 		else if (i >= 134616 && i <= 134861) {
 			result << "0 0 1" << " ";
 			A1 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;
@@ -111,7 +111,7 @@ void main() {
 		else if (i == 134862) {
 			result << "0 0 0 1" << " ";
 			A1 >> tmp;
-			result << tmp << " ";
+			result << "-" + tmp << " ";
 			A2 >> tmp;
 			result << tmp << " ";
 			A3 >> tmp;

@@ -421,9 +421,8 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		norm = vec_on_vec(r, r);
 		//rA*p_k
 		matr_on_vec(or_A, p, rApk);
-		debug_matr_on_vec(rApk);
-		write_in_file(F, S, "F_exp.dat");
-		break;
+		//debug_matr_on_vec(rApk);
+		//write_in_file(F, S, "F_exp.dat");
 		//(rA*p_k, p_k)
 		vov = vec_on_vec(rApk, p);
 		//ak = ...
@@ -576,7 +575,7 @@ void main() {
 	
 	clock_t begin = clock();
 
-	A.open("result.dat");				// 134862 * 7	| result.dat
+	A.open("A_alt.dat");				// 134862 * 7	| result.dat
 	F.open("F.dat");					// 134862		| F.dat
 
 	create_matr(A, matr_A, S * 7);
