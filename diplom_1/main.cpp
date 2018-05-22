@@ -328,7 +328,7 @@ void debug_matr_on_vec(double *X) {
 }
 
 void CGMR(double *A, double *F, clock_t begin_algo) {
-	const double Eps = 0.1;
+	const double Eps = 0.001;
 
 	//double *rA = new double[S * 7];
 	double *x = new double[S];
@@ -495,7 +495,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop_eps = 0;
 		//stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
-		stop_eps = check_stop(or_A, F, x_k1, Eps);
+		stop_eps = check_stop(A, F, x_k1, Eps);
 
 		add_in_file(stop_eps);
 
@@ -581,4 +581,6 @@ void main() {
 	//last runtime: 847.723 sec.
 	//last runtime: 833.092 sec. / Iteration: 29328
 	//last runtime: 792.424 sec. / Iteration: 25619
+	//last runtime: 2483.177 sec. / Iteration: 83403 / Eps = 0.001
+	//last runtime: 2375.798 sec. / Iteration: 83403 / Eps = 0.001
 }
