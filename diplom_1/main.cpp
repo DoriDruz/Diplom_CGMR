@@ -328,7 +328,7 @@ void debug_matr_on_vec(double *X) {
 }
 
 void CGMR(double *A, double *F, clock_t begin_algo) {
-	const double Eps = 0.00001;
+	const double Eps = 0.00000001;
 
 	//double *rA = new double[S * 7];
 	double *x = new double[S];
@@ -343,7 +343,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	double bk = 0;
 	
 	//const coef a
-	double alpha = 0.01;
+	double alpha = 0;
 
 	//tmp
 	double *tmp = new double[S];
@@ -554,7 +554,7 @@ void main() {
 	clock_t begin = clock();
 
 	A.open("A_with_01.dat");				// 134862 * 7	| result.dat
-	F.open("F.dat");						// 134862		| F.dat
+	F.open("F_new.dat");						// 134862		| F.dat
 
 	if (A.is_open() && F.is_open()) {
 		create_matr(A, matr_A, S * 7);
@@ -592,4 +592,7 @@ void main() {
 	//last runtime: 438.88 sec. / Iteration: 15267 / Eps = 0.1 / Alpha = 0.1
 	//last runtime: 2375.026 sec. / Iteration: 76618 / Eps = 0.00001 / Alpha = 0.05
 	//last runtime: 3773.602 sec. / Iteration: 134862+ / Eps = 0.00001 / Alpha = 0.01
+	//with F_new.dat
+	//last runtime: 541.725 sec. / Iteration: 19328 / Eps = 0.00001 / Alpha = 0
+	//last runtime: 3785.569 sec. / Iteration: 134862+ / Eps = 0.00000001 / Alpha = 0
 }

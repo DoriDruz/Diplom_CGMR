@@ -55,7 +55,7 @@ void showv(double * ptr, int start, int size) {
 	//}
 
 	fstream result_file;
-	result_file.open("X_ars.dat");
+	result_file.open("X_ars_new.dat");
 	
 	for (int i = start; i < start + size; ++i) {
 		result_file << ptr[i] << endl;
@@ -243,7 +243,7 @@ int prep() {
 	A3f.open("original_data/A3.dat");
 	A4f.open("original_data/A4.dat");
 	A5f.open("original_data/A5.dat");
-	Ff.open("original_data/F");
+	Ff.open("original_data/F_new.dat");
 
 	if (A1f.is_open() && A2f.is_open() && A3f.is_open()
 		&& A4f.is_open() && A5f.is_open() && Ff.is_open()) {
