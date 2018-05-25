@@ -138,21 +138,26 @@ void main() {
 	double *matr_A = new double[S * 7];
 	double *matr_F = new double[S];
 	double *matr_X = new double[S];
+	double *matr_X2 = new double[S];
 	
 	ifstream A;
 	ifstream F;
 	ifstream X;
+	ifstream X2;
 	
-	A.open("A_with_minus_and_01.dat");
+	A.open("A_with_01.dat");
 	F.open("F.dat");
 	X.open("X_1.dat");
+	X2.open("X_ars.dat");
 	
 	create_matr(A, matr_A, S * 7);
 	create_matr(F, matr_F, S);
 	create_matr(X, matr_X, S);
+	create_matr(X2, matr_X2, S);
 	
 	if (A.is_open() && F.is_open() && X.is_open()) {
 		nev(matr_A, matr_F, matr_X);
+		nev(matr_A, matr_F, matr_X2);
 	}
 	else {
 		cout << "Error reading files" << endl;
@@ -165,6 +170,7 @@ void main() {
 	delete(matr_A);
 	delete(matr_F);
 	delete(matr_X);
+	delete(matr_X2);
 
 	system("pause");
 }

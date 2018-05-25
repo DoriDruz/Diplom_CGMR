@@ -328,7 +328,7 @@ void debug_matr_on_vec(double *X) {
 }
 
 void CGMR(double *A, double *F, clock_t begin_algo) {
-	const double Eps = 0.001;
+	const double Eps = 0.00001;
 
 	//double *rA = new double[S * 7];
 	double *x = new double[S];
@@ -407,7 +407,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	
 	//WHY NEVYAZKA INCREASING ? - Different data in arrays? Make zero iter out of cycle?
 
-	while( !(stop_eps < Eps) ) {
+	while( !(stop_eps < Eps) && count_tmp < S) {
 
 		count_tmp++;
 		cout << "Iteration: " << count_tmp << " / " << S << endl;
@@ -501,7 +501,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 
 		cout << "Nev: " << stop_eps << " " << ((stop_eps < Eps) ? "<" : ">") << " " << Eps << endl << endl;
 		//boolalpha << 
-		if(stop_eps < Eps){
+		if(stop_eps < Eps || count_tmp > S - 1){
 			write_in_file(x_k1, S, "X_1.dat");
 		}
 		
@@ -583,4 +583,13 @@ void main() {
 	//last runtime: 792.424 sec. / Iteration: 25619
 	//last runtime: 2483.177 sec. / Iteration: 83403 / Eps = 0.001
 	//last runtime: 2375.798 sec. / Iteration: 83403 / Eps = 0.001
+	//last runtime: 1644.729 sec. / Iteration: 53317 / Eps = 0.01
+	//last runtime: 740.28 sec. / Iteration: 25619 / Eps = 0.1
+	//last runtime: 254.525 sec. / Iteration: 8627 / Eps = 0.1 / Alpha = 0.5
+	//last runtime: ~369 sec. / Iteration: ? / Eps = 0.01 / Alpha = 0.5
+	//last runtime: 496.967 sec. / Iteration: 17601 / Eps = 0.001 / Alpha = 0.5
+	//last runtime: 564.746 sec. / Iteration: 18385 / Eps = 0.1 / Alpha = 0.05
+	//last runtime: 438.88 sec. / Iteration: 15267 / Eps = 0.1 / Alpha = 0.1
+	//last runtime: 2375.026 sec. / Iteration: 76618 / Eps = 0.00001 / Alpha = 0.05
+	//last runtime: 3773.602 sec. / Iteration: 134862+ / Eps = 0.00001 / Alpha = 0.01
 }
