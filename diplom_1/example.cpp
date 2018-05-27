@@ -179,6 +179,24 @@ void solvev(double * A, double * B, double * X) {
 	}
 }
 
+void write_in_file(double *vec, double size, string name) {
+	clock_t begin_write = clock();
+
+	cout << "Start write in file" << endl;
+	ofstream result_file;
+	result_file.open(name, ofstream::trunc); //x_res_from_main.txt
+
+	for (int i = 0; i < size; ++i) {
+		result_file << vec[i] << endl;
+	}
+
+	result_file.close();
+
+	clock_t end_write = clock();
+	double write_time = double(end_write - begin_write) / CLOCKS_PER_SEC;
+	cout << "Stop write in file: " << write_time << endl;
+}
+
 void solvem(double * A, double * B, double * X) {
 	// Gaussian elimination 
 	double tmpA[m*m];
@@ -209,6 +227,8 @@ void solvem(double * A, double * B, double * X) {
 			}
 		}
 	}
+	write_in_file(tmpA, m*m, "debug.dat");
+	system("pause");
 
 	// Inverse
 

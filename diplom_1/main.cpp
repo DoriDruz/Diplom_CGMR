@@ -328,7 +328,7 @@ void debug_matr_on_vec(double *X) {
 }
 
 void CGMR(double *A, double *F, clock_t begin_algo) {
-	const double Eps = 0.00000001;
+	const double Eps = 0.001;
 
 	//double *rA = new double[S * 7];
 	double *x = new double[S];
@@ -592,7 +592,11 @@ void main() {
 	//last runtime: 438.88 sec. / Iteration: 15267 / Eps = 0.1 / Alpha = 0.1
 	//last runtime: 2375.026 sec. / Iteration: 76618 / Eps = 0.00001 / Alpha = 0.05
 	//last runtime: 3773.602 sec. / Iteration: 134862+ / Eps = 0.00001 / Alpha = 0.01
-	//with F_new.dat
+		//with F_new.dat
 	//last runtime: 541.725 sec. / Iteration: 19328 / Eps = 0.00001 / Alpha = 0
 	//last runtime: 3785.569 sec. / Iteration: 134862+ / Eps = 0.00000001 / Alpha = 0
+		//with F_new.dat and A_with_minus_and_01 - не стоит использовать с минусом матрицу ј
+	//last runtime: 1571.473 sec. / Iteration: 43674 / Eps = 0.001 / Alpha = 0
+
+	//! ѕосчитать с Eps = 10^-8 но без ограничени€ по количеству итераций !
 }
