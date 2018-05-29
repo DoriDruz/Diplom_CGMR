@@ -52,6 +52,7 @@ void mult_vec_on_num(double *vec, double num, double *res_vec) {
 	for (int i = 0; i < S; ++i) {
 		res_vec[i] = vec[i] * num;
 	}
+	//cout << res_vec[0] << " " << vec[0] << " * " << num << endl;
 }
 
 //function changing original matrix A
@@ -264,6 +265,12 @@ void matr_on_vec(double *matr, double *vec, double *res_vec) {
 		//debug
 		//debug_f.close();
 	}
+	/*cout << 0 << ": " << res_vec[0] << " = " \
+		<< matr[0] << " * " << vec[0] << " + " \
+		<< matr[1] << " * " << vec[1] << " + " \
+		<< matr[2] << " * " << vec[247] << " + " \
+		<< matr[3] << " * " << vec[494] \
+		<< endl;*/
 }
 
 double vec_on_vec(double *vec_one, double *vec_two) {
@@ -274,7 +281,6 @@ double vec_on_vec(double *vec_one, double *vec_two) {
 	//debug
 	//cout << res << endl;
 	//system("pause");
-	
 	return res;
 }
 
@@ -283,6 +289,7 @@ double norm_vec(double *vec) {
 	for (int i = 0; i < S; ++i) {
 		res += pow(vec[i], 2);
 	}
+	//cout << "res: " << sqrt(res) << endl << endl;
 	return sqrt(res);
 }
 
@@ -309,9 +316,9 @@ double check_stop(double *A, double *F, double *X, double Eps) {
 	stop_up = norm_vec(stop_vec);
 	stop_down = norm_vec(F);
 	
+	//cout << stop_vec[0] << " " << F[0] << endl;
 	delete(stop_vec);
 	delete(stop_tmp);
-	
 	return stop_up / stop_down;
 }
 
@@ -328,7 +335,7 @@ void debug_matr_on_vec(double *X) {
 }
 
 void CGMR(double *A, double *F, clock_t begin_algo) {
-	const double Eps = 0.001;
+	const double Eps = 0.00000001;
 
 	//double *rA = new double[S * 7];
 	double *x = new double[S];
@@ -407,7 +414,7 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 	
 	//WHY NEVYAZKA INCREASING ? - Different data in arrays? Make zero iter out of cycle?
 
-	while( !(stop_eps < Eps) && count_tmp < S) {
+	while( !(stop_eps < Eps)) {
 
 		count_tmp++;
 		cout << "Iteration: " << count_tmp << " / " << S << endl;
@@ -496,12 +503,11 @@ void CGMR(double *A, double *F, clock_t begin_algo) {
 		//stop_eps = (isnan(stop_norm / stop_norm2) ? 0 : (stop_norm / stop_norm2));
 
 		stop_eps = check_stop(A, F, x_k1, Eps);
-
 		add_in_file(stop_eps);
 
 		cout << "Nev: " << stop_eps << " " << ((stop_eps < Eps) ? "<" : ">") << " " << Eps << endl << endl;
 		//boolalpha << 
-		if(stop_eps < Eps || count_tmp > S - 1){
+		if(stop_eps < Eps || count_tmp == S * 2 || count_tmp == S * 3 || count_tmp == S * 4){
 			write_in_file(x_k1, S, "X_1.dat");
 		}
 		
@@ -554,7 +560,7 @@ void main() {
 	clock_t begin = clock();
 
 	A.open("A_with_01.dat");				// 134862 * 7	| result.dat
-	F.open("F_new.dat");						// 134862		| F.dat
+	F.open("F.dat");						// 134862		| F.dat
 
 	if (A.is_open() && F.is_open()) {
 		create_matr(A, matr_A, S * 7);
@@ -578,6 +584,7 @@ void main() {
 
 	system("pause");
 
+		//with F.dat
 	//last runtime: 847.723 sec.
 	//last runtime: 833.092 sec. / Iteration: 29328
 	//last runtime: 792.424 sec. / Iteration: 25619
@@ -599,4 +606,7 @@ void main() {
 	//last runtime: 1571.473 sec. / Iteration: 43674 / Eps = 0.001 / Alpha = 0
 
 	//! ѕосчитать с Eps = 10^-8 но без ограничени€ по количеству итераций !
+	//last runtime: ~2h  / Iteration: ~S*2 / Eps = 0.0000000001 / Alpha = 0
+	//last runtime: >~14h / Iteration: ~2kk / Eps = 0.0000000001 / Alpha = 0
+	//10:^-8 лучше не брать - вместо этого можно посчитать при Eps = 10^-6, должно сойтись примерно за 2-2.5 часа
 }
